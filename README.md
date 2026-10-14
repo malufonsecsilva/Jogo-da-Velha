@@ -3,9 +3,8 @@
 Checkpoint 1 — O primeiro jogo
 
 **Integrantes do grupo:**
-- _Nome 1_
-- _Nome 2_
-- _Nome 3_
+Maria Luiza Fonseca Silva
+Julia de Andrade Leal
 
 ## Sobre o jogo
 
