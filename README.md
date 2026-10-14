@@ -200,7 +200,7 @@ classDiagram
 
 ## Demonstração
 
-Roteiro sugerido para a apresentação:
+
 
 1. Iniciar o jogo e informar os nomes dos jogadores.
 2. Tentar uma jogada inválida: texto no lugar de número, casa fora do tabuleiro (`5 5`) e casa já ocupada.
