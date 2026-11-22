@@ -6,6 +6,7 @@ public class Jogo {
     private int indiceAtual;
     private StatusPartida status;
     private Jogador vencedor;
+    private final RegraPosicionamento posicionamento = new PosicaoLivre();
 
     public Jogo(Jogador jogador1, Jogador jogador2, Console console) {
         this.jogadores = new Jogador[] {jogador1, jogador2};
@@ -50,12 +51,14 @@ public class Jogo {
 
     private void executarTurno(Jogador atual) {
         while (true) {
-            Jogada jogada = console.lerJogada(atual);
-            if (tabuleiro.jogadaValida(jogada)) {
+            try {
+                int[] entrada = console.lerJogada(atual, posicionamento.instrucao());
+                Jogada jogada = posicionamento.resolver(tabuleiro, entrada);
                 tabuleiro.colocar(jogada, atual.getPeca());
                 return;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Jogada inválida: " + e.getMessage());
             }
-            System.out.println("Jogada inválida: casa fora do tabuleiro ou já ocupada.");
         }
     }
 

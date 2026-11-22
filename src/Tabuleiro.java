@@ -15,6 +15,14 @@ public class Tabuleiro {
         }
     }
 
+    public int getLinhas() {
+    return linhas;
+    }
+
+    public int getColunas() {
+    return colunas;
+    }
+
     public boolean dentroDosLimites(Jogada jogada) {
         return dentroDosLimites(jogada.getLinha(), jogada.getColuna());
     }
