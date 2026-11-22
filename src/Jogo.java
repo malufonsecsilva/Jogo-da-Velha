@@ -7,6 +7,7 @@ public class Jogo {
     private StatusPartida status;
     private Jogador vencedor;
     private final RegraPosicionamento posicionamento = new PosicaoLivre();
+    private final CondicaoVitoria condicaoVitoria = new Alinhamento(3);
 
     public Jogo(Jogador jogador1, Jogador jogador2, Console console) {
         this.jogadores = new Jogador[] {jogador1, jogador2};
@@ -63,7 +64,7 @@ public class Jogo {
     }
 
     private void atualizarStatus(Jogador atual) {
-        if (tabuleiro.temVitoria(atual.getPeca(), 3)) {
+        if (condicaoVitoria.atingida(tabuleiro, atual.getPeca())) {
             status = StatusPartida.VITORIA;
             vencedor = atual;
         } else if (tabuleiro.estaCheio()) {
