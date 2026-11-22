@@ -1,36 +1,46 @@
 public class Tabuleiro {
-    public static final int TAMANHO = 3;
+    private final int linhas;
+    private final int colunas;
+    private final Peca[][] casas;
 
-    private final Peca[][] casas = new Peca[TAMANHO][TAMANHO];
+    public Tabuleiro(int linhas, int colunas) {
+        this.linhas = linhas;
+        this.colunas = colunas;
+        this.casas = new Peca[linhas][colunas];
 
-    public Tabuleiro() {
-        for (int i = 0; i < TAMANHO; i++) {
-            for (int j = 0; j < TAMANHO; j++) {
-                casas[i][j] = Peca.VAZIA;
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                casas[linha][coluna] = Peca.VAZIA;
             }
         }
     }
 
     public boolean dentroDosLimites(Jogada jogada) {
-        return jogada.getLinha() >= 0 && jogada.getLinha() < TAMANHO
-                && jogada.getColuna() >= 0 && jogada.getColuna() < TAMANHO;
+        return dentroDosLimites(jogada.getLinha(), jogada.getColuna());
+    }
+
+    private boolean dentroDosLimites(int linha, int coluna) {
+        return linha >= 0 && linha < linhas
+                && coluna >= 0 && coluna < colunas;
     }
 
     public boolean jogadaValida(Jogada jogada) {
-        return dentroDosLimites(jogada) && casas[jogada.getLinha()][jogada.getColuna()] == Peca.VAZIA;
+        return dentroDosLimites(jogada)
+                && casas[jogada.getLinha()][jogada.getColuna()] == Peca.VAZIA;
     }
 
     public void colocar(Jogada jogada, Peca peca) {
         if (!jogadaValida(jogada)) {
             throw new IllegalArgumentException("Jogada inválida.");
         }
+
         casas[jogada.getLinha()][jogada.getColuna()] = peca;
     }
 
     public boolean estaCheio() {
         for (Peca[] linha : casas) {
-            for (Peca p : linha) {
-                if (p == Peca.VAZIA) {
+            for (Peca peca : linha) {
+                if (peca == Peca.VAZIA) {
                     return false;
                 }
             }
@@ -38,26 +48,60 @@ public class Tabuleiro {
         return true;
     }
 
-    public boolean temVitoria(Peca peca) {
-        for (int i = 0; i < TAMANHO; i++) {
-            if (casas[i][0] == peca && casas[i][1] == peca && casas[i][2] == peca) return true; // linha
-            if (casas[0][i] == peca && casas[1][i] == peca && casas[2][i] == peca) return true; // coluna
+    public boolean temVitoria(Peca peca, int quantidade) {
+        int[][] direcoes = {
+                {0, 1},  // horizontal
+                {1, 0},  // vertical
+                {1, 1},  // diagonal para a direita
+                {1, -1}  // diagonal para a esquerda
+        };
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                for (int[] direcao : direcoes) {
+                    if (temSequencia(linha, coluna, direcao[0], direcao[1],
+                            peca, quantidade)) {
+                        return true;
+                    }
+                }
+            }
         }
-        if (casas[0][0] == peca && casas[1][1] == peca && casas[2][2] == peca) return true;     // diagonal
-        return casas[0][2] == peca && casas[1][1] == peca && casas[2][0] == peca;               // diagonal inversa
+        return false;
+    }
+
+    private boolean temSequencia(int linha, int coluna, int passoLinha,
+                                 int passoColuna, Peca peca, int quantidade) {
+        for (int i = 0; i < quantidade; i++) {
+            if (!dentroDosLimites(linha, coluna) || casas[linha][coluna] != peca) {
+                return false;
+            }
+
+            linha += passoLinha;
+            coluna += passoColuna;
+        }
+        return true;
     }
 
     public void exibir() {
         System.out.println();
-        System.out.println("     1   2   3");
-        for (int i = 0; i < TAMANHO; i++) {
-            System.out.println("   +---+---+---+");
-            System.out.print(" " + (i + 1) + " |");
-            for (int j = 0; j < TAMANHO; j++) {
-                System.out.print(" " + casas[i][j].getSimbolo() + " |");
+        System.out.print("    ");
+
+        for (int coluna = 1; coluna <= colunas; coluna++) {
+            System.out.printf(" %2d ", coluna);
+        }
+        System.out.println();
+
+        String separador = "    " + "+---".repeat(colunas) + "+";
+
+        for (int linha = 0; linha < linhas; linha++) {
+            System.out.println(separador);
+            System.out.printf("%3d |", linha + 1);
+
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                System.out.printf(" %c |", casas[linha][coluna].getSimbolo());
             }
             System.out.println();
         }
-        System.out.println("   +---+---+---+");
+        System.out.println(separador);
     }
 }

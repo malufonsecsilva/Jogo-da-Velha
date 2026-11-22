@@ -14,7 +14,7 @@ public class Jogo {
     }
 
     public void reiniciar() {
-        this.tabuleiro = new Tabuleiro();
+        this.tabuleiro = new Tabuleiro(3, 3);
         this.indiceAtual = 0;
         this.status = StatusPartida.EM_ANDAMENTO;
         this.vencedor = null;
@@ -60,7 +60,7 @@ public class Jogo {
     }
 
     private void atualizarStatus(Jogador atual) {
-        if (tabuleiro.temVitoria(atual.getPeca())) {
+        if (tabuleiro.temVitoria(atual.getPeca(), 3)) {
             status = StatusPartida.VITORIA;
             vencedor = atual;
         } else if (tabuleiro.estaCheio()) {
