@@ -15,13 +15,25 @@ public class Tabuleiro {
         }
     }
 
+    public int getLinhas() {
+    return linhas;
+    }
+
+    public int getColunas() {
+    return colunas;
+    }
+
     public boolean dentroDosLimites(Jogada jogada) {
         return dentroDosLimites(jogada.getLinha(), jogada.getColuna());
     }
 
-    private boolean dentroDosLimites(int linha, int coluna) {
+    public boolean dentroDosLimites(int linha, int coluna) {
         return linha >= 0 && linha < linhas
                 && coluna >= 0 && coluna < colunas;
+    }
+
+    public Peca getPeca(int linha, int coluna) {
+    return casas[linha][coluna];
     }
 
     public boolean jogadaValida(Jogada jogada) {

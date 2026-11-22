@@ -10,25 +10,27 @@ public class Console {
         return nome.isEmpty() ? "Jogador" : nome;
     }
 
-    /** Lê linha e coluna de 1 a 3 e converte para base 0. */
-    public Jogada lerJogada(Jogador jogador) {
-        while (true) {
-            System.out.print(jogador + ", informe linha e coluna (ex: 2 3): ");
-            if (!scanner.hasNextLine()) {
-                throw new IllegalStateException("Entrada encerrada.");
-            }
-            String[] partes = scanner.nextLine().trim().split("\\s+");
-            if (partes.length == 2) {
-                try {
-                    int linha = Integer.parseInt(partes[0]) - 1;
-                    int coluna = Integer.parseInt(partes[1]) - 1;
-                    return new Jogada(linha, coluna);
-                } catch (NumberFormatException e) {
-                    // Ignora e exibe a mensagem de entrada inválida abaixo
-                }
-            }
-            System.out.println("Entrada inválida. Digite dois números separados por espaço.");
+    /** Lê a linha e a coluna de 1 a 3 e converte tudo pra base 0 */
+    public int[] lerJogada(Jogador jogador, String instrucao) {
+        System.out.print(jogador + ", " + instrucao + ": ");
+
+        if (!scanner.hasNextLine()) {
+           throw new IllegalStateException("Entrada encerrada.");
         }
+
+        String[] partes = scanner.nextLine().trim().split("\\s+");
+        int[] numeros = new int[partes.length];
+
+        try {
+            for (int i = 0; i < partes.length; i++) {
+                numeros[i] = Integer.parseInt(partes[i]);
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(
+                "Digite apenas números inteiros separados por espaço.");
+    }
+
+    return numeros;
     }
 
     public boolean perguntarNovaPartida() {
